@@ -13,7 +13,7 @@
 			unit.multiplyFactor = unit.by;
 		}
 	});
-	function MechanicalClock(interval) {
+	function BalanceWheel(interval) {
 		//default : second hand tick occurs 1 time per sec.
 		//If 3Hz, or 3*2*3600=21600vPh(vibration per hour) is to be simulated,
 		//tickInterval value should be calcuated to a value 1000/(3*2), which means
@@ -28,7 +28,7 @@
 		}
 		this.tickHandlers = $.Callbacks();
 	}
-	MechanicalClock.prototype.setInterval = function(interval) {
+	BalanceWheel.prototype.setInterval = function(interval) {
 		var self = this;
 		if(interval === undefined || interval === null) {
 			interval = this.interval;
@@ -48,21 +48,21 @@
 			}
 		});
 	};
-	MechanicalClock.prototype.start = function() {
+	BalanceWheel.prototype.start = function() {
 
 	};
-	MechanicalClock.prototype.stop = function() {
+	BalanceWheel.prototype.stop = function() {
 
 	};
-	MechanicalClock.prototype.addTickHandler = function(handler) {
+	BalanceWheel.prototype.addTickHandler = function(handler) {
 		this.tickHandlers.add(handler);
 	};
-	MechanicalClock.prototype.removeTickHandler = function(handler) {
+	BalanceWheel.prototype.removeTickHandler = function(handler) {
 		this.tickHandlers.remove(handler);
 	};
-	MechanicalClock.prototype._tick = function() {
+	BalanceWheel.prototype._tick = function() {
 		//TODO Role of tick handlers?
 		this.tickHandlers.fire();
 	};
-	window.MechanicalClock = MechanicalClock;
+	window.BalanceWheel = BalanceWheel;
 })(jQuery);
