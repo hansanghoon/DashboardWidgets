@@ -1,0 +1,13 @@
+.widget {
+	display : none;
+	height : 256px;
+	width : 256px;
+	border: 1px solid grey;
+}
+.widget.active {
+	display : block;
+}
+
+.widget.front {
+	background: url('Default.png') no-repeat fixed center;
+}
