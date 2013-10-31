@@ -26,11 +26,7 @@
 		if(interval !== undefined && interval !== null) {
 			this.setInterval(interval);
 		}
-		this.hands = {
-			hour : 0,
-			minute : 0,
-			second : 0
-		};
+		this.tickHandlers = $.Callbacks();
 	}
 	MechanicalClock.prototype.setInterval = function(interval) {
 		var self = this;
@@ -52,11 +48,21 @@
 			}
 		});
 	};
-	MechanicalClock.prototype.startBeat = function() {
+	MechanicalClock.prototype.start = function() {
 
 	};
-	MechanicalClock.prototype.stopBeat = function() {
+	MechanicalClock.prototype.stop = function() {
 
+	};
+	MechanicalClock.prototype.addTickHandler = function(handler) {
+		this.tickHandlers.add(handler);
+	};
+	MechanicalClock.prototype.removeTickHandler = function(handler) {
+		this.tickHandlers.remove(handler);
+	};
+	MechanicalClock.prototype._tick = function() {
+		//TODO Role of tick handlers?
+		this.tickHandlers.fire();
 	};
 	window.MechanicalClock = MechanicalClock;
-})(Zepto);
+})(jQuery);
