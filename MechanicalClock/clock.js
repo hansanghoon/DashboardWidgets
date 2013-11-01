@@ -13,7 +13,7 @@
 			unit.multiplyFactor = unit.by;
 		}
 	});
-	function BalanceWheel(interval) {
+	function TickGenerator(interval) {
 		//default : second hand tick occurs 1 time per sec.
 		//If 3Hz, or 3*2*3600=21600vPh(vibration per hour) is to be simulated,
 		//tickInterval value should be calcuated to a value 1000/(3*2), which means
@@ -28,7 +28,7 @@
 		}
 		this.tickHandlers = $.Callbacks();
 	}
-	BalanceWheel.prototype.setInterval = function(interval) {
+	TickGenerator.prototype.setInterval = function(interval) {
 		var self = this;
 		if(interval === undefined || interval === null) {
 			interval = this.interval;
@@ -48,21 +48,30 @@
 			}
 		});
 	};
-	BalanceWheel.prototype.start = function() {
+	TickGenerator.prototype.start = function() {
 
 	};
-	BalanceWheel.prototype.stop = function() {
+	TickGenerator.prototype.stop = function() {
 
 	};
-	BalanceWheel.prototype.addTickHandler = function(handler) {
+	TickGenerator.prototype.addTickHandler = function(handler) {
 		this.tickHandlers.add(handler);
 	};
-	BalanceWheel.prototype.removeTickHandler = function(handler) {
+	TickGenerator.prototype.removeTickHandler = function(handler) {
 		this.tickHandlers.remove(handler);
 	};
-	BalanceWheel.prototype._tick = function() {
+	TickGenerator.prototype._tick = function() {
 		//TODO Role of tick handlers?
-		this.tickHandlers.fire();
+		var year = 2013,
+		    month = 0,
+		    date = 1,
+		    day = 0,
+		    hour = 0,
+		    minute = 0,
+		    second = 0,
+		    millisecond = 0;
+		 //read current time and set variables.
+		this.tickHandlers.fire(year, month, date, day, hour, minute, second, millisecond);
 	};
-	window.BalanceWheel = BalanceWheel;
+	window.TickGenerator = TickGenerator;
 })(jQuery);

@@ -1,3 +1,3 @@
 # Dashboard Widgets
 
-for fun
+Under development. No working version available.
