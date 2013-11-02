@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleDisplayName</key>
-    <string>Hello World</string>
+    <string>Mechanical Clock</string>
     <key>CFBundleIdentifier</key>
     <string>awesome.wildone.widgets.clock.mechanical</string>
     <key>CFBundleName</key>
