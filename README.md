@@ -1,3 +1,11 @@
 # Dashboard Widgets
 
-Under development. No working version available.
+Under development.
+
+## Installation
+
+Copy widget directory with .wdgt extension attached.
+```
+cp -R <directoryname> <directoryname>.wdgt
+open <directoryname>.wdgt
+```
