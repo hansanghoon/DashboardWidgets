@@ -68,7 +68,7 @@ $(function() {
 			ticker.start();
 		};
 		window.widget.onhide = function() {
-			ticker.stop();
+			//ticker.stop();
 		};
 	}
 });
