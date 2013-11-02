@@ -3,13 +3,24 @@
 <head>
 <link rel="stylesheet" type="text/css" href="clock.css">
 <script type="text/javascript" src="jquery-2.0.3.min.js"></script>
-<script type="text/javascript" src="main.js"></script>
 <script type="text/javascript" src="clock.js"></script>
+<script type="text/javascript" src="widget.js"></script>
 </head>
 <body>
-	<div class="widget front active">
+	<div class="widget front active" id="face">
+		<span id="time"></span>
+		<form>
+			<select id="rate" name="beatrate">
+				<option value="1bps">1bps(3,600vPh)</option>
+				<option value="2bps">2bps(7,200vPh)</option>
+				<option value="4bps">4bps(14,400vPh)</option>
+				<option value="6bps">6bps(21,600vPh)</option>
+				<option value="8bps">8bps(28,800vPh)</option>
+			</select>
+			<label><input type="checkbox" name="active" id="active">active</label>
+		</form>
 	</div>
-	<div class="widget back">
+	<div class="widget back" id="back">
 
 	</div>
 </body>

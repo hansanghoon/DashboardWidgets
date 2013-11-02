@@ -1,6 +1,4 @@
 (function($){
-	var I_YEAR = 0, I_MONTH = 1, I_DATE = 2, I_DAY = 3, 
-	    I_HOUR = 4, I_MINUTE = 5, I_SECOND = 6, I_MILLI = 7;
 	var units = [{name:"vps",op:"divide",by:1},
 			 {name:"bps",op:"divide",by:1},
 			 {name:"vpm",op:"divide",by:60},
@@ -29,7 +27,17 @@
 			this.setInterval(interval);
 		}
 		this.tickHandlers = $.Callbacks();
+		this.tickTimer = null;
 	}
+	TickGenerator.I_YEAR = 0;
+	TickGenerator.I_MONTH = 1; 
+	TickGenerator.I_DATE = 2; 
+	TickGenerator.I_DAY = 3; 
+	TickGenerator.I_HOUR = 4;
+	TickGenerator.I_MINUTE = 5;
+	TickGenerator.I_SECOND = 6;
+	TickGenerator.I_MILLI = 7;
+	TickGenerator.I_INST = 8;
 	TickGenerator.prototype.setInterval = function(interval) {
 		var self = this;
 		if(interval === undefined || interval === null) {
@@ -51,10 +59,32 @@
 		});
 	};
 	TickGenerator.prototype.start = function() {
-
+		if(this.tickTimer) {
+			return;
+		}
+		var self = this;
+		self.tickTimer = {timer:null};
+		function tick(date) {
+			date = date || new Date();
+			self.tick(date);
+			self.setNextTickTimeout(date, tick);
+		}
+		tick(new Date());
 	};
 	TickGenerator.prototype.stop = function() {
-
+		if(this.tickTimer) {
+			clearTimeout(this.tickTimer.timer);
+			this.tickTimer = null;
+		}
+	};
+	TickGenerator.prototype.setNextTickTimeout = function(date, handler) {
+		if(!date || !this.tickTimer) {
+			return;
+		}
+		var current = new Date(date);
+		var next = this.getCurrentTickTime(date,1);
+		var diff = next[TickGenerator.I_INST].getTime() - current.getTime(); //difference in milliseconds.
+		this.tickTimer.timer = setTimeout(handler, diff);
 	};
 	TickGenerator.prototype.addTickHandler = function(handler) {
 		this.tickHandlers.add(handler);
@@ -62,35 +92,34 @@
 	TickGenerator.prototype.removeTickHandler = function(handler) {
 		this.tickHandlers.remove(handler);
 	};
-	TickGenerator.prototype.getCurrentTickTime = function(phase) {
-		var date = new Date();
+	TickGenerator.prototype.getCurrentTickTime = function(date, phase) {
+		date = date ? new Date(date) : new Date();
 		date.setMilliseconds(date.getMilliseconds() +
 			(typeof phase === "number" ? (1000*(phase/this.jumpsPerSecond)) : 0));
 		//TODO round milliseconds according to jumpsPerSecond
 		for(var i=0; i<(this.jumpsPerSecond); i++) {
 			var a = 1000*(i/this.jumpsPerSecond);
 			var b = 1000*((i+1)/this.jumpsPerSecond);
-			var m = date.getMilliseconds();//t[I_MILLI]
+			var m = date.getMilliseconds();
 			if(a <= m && m <= b) {
-				date.setMilliseconds(Math.abs(a-m) > Math.abs(b-m) ? b : a);
-				//t[I_MILLI] = Math.abs(a-m) > Math.abs(b-m) ? b : a;
-				//t[I_SECOND] += (i===this.jumpsPerSecond-1) && Math.abs(a-m) > Math.abs(b-m) ? 1 : 0;
+				date.setMilliseconds(Math.abs(a-m) < Math.abs(b-m) ? a : b);
 			}
 		}
 		var t = [];
-		t[ I_YEAR  ] = date.getFullYear();
-		t[ I_MONTH ] = date.getMonth() + 1;
-		t[ I_DATE  ] = date.getDate();
-		t[ I_DAY   ] = date.getDay();//0 sunday
-		t[ I_HOUR  ] = date.getHours();
-		t[ I_MINUTE] = date.getMinutes();
-		t[ I_SECOND] = date.getSeconds();
-		t[ I_MILLI ] = date.getMilliseconds();
+		t[ TickGenerator.I_YEAR  ] = date.getFullYear();
+		t[ TickGenerator.I_MONTH ] = date.getMonth() + 1;
+		t[ TickGenerator.I_DATE  ] = date.getDate();
+		t[ TickGenerator.I_DAY   ] = date.getDay();//0 sunday
+		t[ TickGenerator.I_HOUR  ] = date.getHours();
+		t[ TickGenerator.I_MINUTE] = date.getMinutes();
+		t[ TickGenerator.I_SECOND] = date.getSeconds();
+		t[ TickGenerator.I_MILLI ] = date.getMilliseconds();
+		t[ TickGenerator.I_INST  ] = date;
 		return t;
 	};
-	TickGenerator.prototype._tick = function() {
+	TickGenerator.prototype.tick = function(date) {
 		//TODO Role of tick handlers?
-		this.tickHandlers.fire.apply(this.tickHandlers, this.getCurrentTickTime());
+		this.tickHandlers.fire.apply(this.tickHandlers, this.getCurrentTickTime(date));
 	};
 	window.TickGenerator = TickGenerator;
 })(jQuery);
