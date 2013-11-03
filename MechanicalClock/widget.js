@@ -46,8 +46,8 @@ $(function() {
 		if(window.widget) {
 			widget.prepareForTransition('ToFront');
 		}
-		$('.widget.front').addClass('active');
 		$('.widget.back').removeClass('active');
+		$('.widget.front').addClass('active');
 		if (window.widget) {
 	        setTimeout ('widget.performTransition();', 0);
 	    }
